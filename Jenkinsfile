@@ -13,14 +13,14 @@ pipeline {
                           userRemoteConfigs: [[url: "${GITHUB_URL}"]]])
             }
         }
-        stage('Deploy to Kubernetes Cluster') {
+stage('Deploy to Kubernetes Cluster') {
             steps {
                 script {
-                    sh "kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.3/config/manifests/metallb-native.yaml"
-                    sh "kubectl apply -f l2advertisement.yaml -n metallb-system"
-                    sh "kubectl apply -f ipaddresses.yaml -n metallb-system"
-                    sh "kubectl get IPAddressPool -A"
-                    sh "kubectl get L2Advertisement -A"
+                    sh "kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.3/config/manifests/metallb-native.yaml --kubeconfig=${KUBECONFIG}"
+                    sh "kubectl apply -f l2advertisement.yaml -n metallb-system --kubeconfig=${KUBECONFIG}"
+                    sh "kubectl apply -f ipaddresses.yaml -n metallb-system --kubeconfig=${KUBECONFIG}"
+                    sh "kubectl get IPAddressPool -A --kubeconfig=${KUBECONFIG}"
+                    sh "kubectl get L2Advertisement -A --kubeconfig=${KUBECONFIG}"
                 }
             }
         }
